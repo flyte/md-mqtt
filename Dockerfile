@@ -9,6 +9,6 @@ RUN apk add --update \
 WORKDIR /app
 COPY . /app
 
-RUN pipenv install --system
+RUN pipenv install --system --deploy
 
-ENTRYPOINT ["/usr/bin/env", "python", "-m", "md_mqtt.server", "config.yml"]
+ENTRYPOINT ["/usr/bin/env", "python", "-m", "md_mqtt.server", "/config.yml"]
