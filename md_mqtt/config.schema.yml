@@ -60,3 +60,6 @@ mdstat:
       type: integer
       min: 1
       default: 30  # Every 30 secs
+    location:
+      type: string
+      default: /proc/mdstat

@@ -173,7 +173,7 @@ if __name__ == "__main__":
     topic_prefix = config["mqtt"]["topic_prefix"]
     try:
         while True:
-            data = mdstat.parse()
+            data = mdstat.parse(config["mdstat"]["location"])
             client.publish(topic_prefix, payload=json.dumps(data))
             sleep(config["mdstat"]["report_frequency"])
     except KeyboardInterrupt:
