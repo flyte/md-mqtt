@@ -12,7 +12,7 @@ name = "pypi"
 [packages]
 
 paho-mqtt = "*"
-PyYAML = "*"
+pyyaml = "*"
 "enum34" = "*"
-Cerberus = "*"
+cerberus = "*"
 mdstat = "*"

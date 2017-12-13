@@ -52,13 +52,11 @@ mqtt:
       required: no
       default: dead
 
-arrays:
-  type: list
+mdstat:
+  type: dict
   required: yes
   schema:
-    type: dict
-    schema:
-      name:
-        type: string
-        required: yes
-        empty: no
+    report_frequency:
+      type: integer
+      min: 1
+      default: 30  # Every 30 secs

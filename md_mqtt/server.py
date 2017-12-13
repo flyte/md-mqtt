@@ -3,11 +3,12 @@ import logging
 import yaml
 import sys
 import socket
-from time import sleep, time
-from importlib import import_module
+import json
+from time import sleep
 
 import paho.mqtt.client as mqtt
 import cerberus
+import mdstat
 
 from md_mqtt import CONFIG_SCHEMA
 
@@ -67,13 +68,11 @@ def on_log(client, userdata, level, buf):
     _LOG.log(LOG_LEVEL_MAP[level], "MQTT client: %s" % buf)
 
 
-def init_mqtt(config, digital_outputs):
+def init_mqtt(config):
     """
     Configure MQTT client.
     :param config: Validated config dict containing MQTT connection details
     :type config: dict
-    :param digital_outputs: List of validated config dicts for digital outputs
-    :type digital_outputs: list
     :return: Connected and initialised MQTT client
     :rtype: paho.mqtt.client.Client
     """
@@ -162,7 +161,7 @@ if __name__ == "__main__":
         sys.exit(1)
     config = validator.normalized(config)
 
-    client = init_mqtt(config["mqtt"], config["digital_outputs"])
+    client = init_mqtt(config["mqtt"])
 
     try:
         client.connect(config["mqtt"]["host"], config["mqtt"]["port"], 60)
@@ -174,8 +173,9 @@ if __name__ == "__main__":
     topic_prefix = config["mqtt"]["topic_prefix"]
     try:
         while True:
-
-            sleep(0.01)
+            data = mdstat.parse()
+            client.publish(topic_prefix, payload=json.dumps(data))
+            sleep(config["mdstat"]["report_frequency"])
     except KeyboardInterrupt:
         print("")
     finally:
